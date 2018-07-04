@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "n0couty ex",
+    "description": "The name of the application"
+  },
+  "appShortName": {
+    "message": "n0couty ex",
+    "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name."
+  },
+  "appDescription": {
+    "message": "n0couty ex is a client of n0couty.",
+    "description": "The description of the application"
+  },
+  "browserActionTitle": {
+    "message": "n0couty ex",
+    "description": "The title of the browser action button"
+  }
+}

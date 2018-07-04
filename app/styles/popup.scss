@@ -1,0 +1,39 @@
+.root {
+    width: 240px;
+    height: 300px;
+}
+
+.first {
+    display: flex;
+    justify-content: center;
+    border-bottom: solid 1px #DDD;
+    padding: 10px;
+}
+
+.first .left {
+    padding: 5px;
+}
+
+.first .right {
+    padding: 5px;
+}
+
+.data {
+    display: block;
+    border-bottom: solid 1px #DDD;
+    padding: 10px;
+}
+
+.item .title {
+    font-weight: 600  
+}
+
+.open {
+    border-bottom: solid 1px #DDD;
+    padding: 10px;
+}
+
+.message {
+    border-bottom: solid 1px #DDD;
+    padding: 10px;
+}
