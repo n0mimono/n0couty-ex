@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <title>n0couty ex</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="../styles/popup.css">
 
   <!-- Latest compiled and minified CSS -->
@@ -33,12 +34,12 @@
     <div class="data">
       <div>
         <ul class="list-group">
-          <li v-if=" cs.run" class="list-group-item item list-group-item-success">クローラ稼働中</li>
-          <li v-if="!cs.run" class="list-group-item item list-group-item-info">クローラ停止中</li>
+          <li v-if="cs.run" class="list-group-item item list-group-item-success"><i class="fas fa-sync fa-fw fa-spin"></i>クローラ稼働中</li>
+          <li v-else class="list-group-item item list-group-item-info"><i class="fas fa-fw fa-sync"></i>クローラ停止中</li>
           <li class="list-group-item item">
             <div class="title">{{ progress + "%" }} - {{ "残り " + countdown.hour +　"時間" + countdown.min + "分" }}</div>
-            <div v-if=" cs.run">データを更新しています... ({{ elapsed }}) : {{ interval }}</div>
-            <div v-if="!cs.run">データの更新を停止しています</div>
+            <div v-if="cs.run">データを更新しています... ({{ elapsed }}) : {{ interval }}</div>
+            <div v-else>データの更新を停止しています</div>
           </li>
           <li class="list-group-item item">
             <div class="title">now</div>
