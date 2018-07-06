@@ -54,7 +54,7 @@ export class Store {
 }
 
 // socket
-export function connect(cb: (cs: CrawlState) => void): WebSocket {
+export function connect(onMessage: (cs: CrawlState) => void, onError: () => void): WebSocket {
     let parser = new URL(host)
     let url = "ws://" + parser.host + "/socket/"
 
@@ -63,7 +63,10 @@ export function connect(cb: (cs: CrawlState) => void): WebSocket {
     }
     socket.onmessage = ev => {
         let cs = JSON.parse(ev.data) as CrawlState
-        cb(cs)
+        onMessage(cs)
+    }
+    socket.onerror = ev => {
+        onError()
     }
     return socket
 }
@@ -77,10 +80,15 @@ export class Timer {
         this.startTime = new Date()
     }
 
-    get(): number {
+    next(): number {
+        let cur = this.current()
+        this.startTime = this.endTime
+        return cur
+    }
+
+    current(): number {
         this.endTime = new Date()
         let diff = this.endTime.valueOf() - this.startTime.valueOf()
-        this.startTime = this.endTime
         return diff
     }
 }

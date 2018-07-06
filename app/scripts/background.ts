@@ -10,6 +10,16 @@ let stats = {
 }
 let timer = new common.Timer()
 
+// network error
+let error = (msg: string) => {
+    chrome.browserAction.setBadgeText({
+        text: msg
+    })
+    chrome.browserAction.setBadgeBackgroundColor({
+        color: [180, 80, 80, 255]
+    })
+}
+
 // connection
 let current: WebSocket
 let connect = () => {
@@ -23,6 +33,8 @@ let connect = () => {
             ...store.state,
             cs: { ...cs },
         })
+    }, () => {
+        error('websocket connection error')
     })
 }
 
@@ -46,7 +58,7 @@ store.addHandler(state => {
         timer.start()
     }
     if (store.prev.cs.qiitaId != state.cs.qiitaId) {
-        let elapsed = timer.get()
+        let elapsed = timer.next()
         stats = {
             num: stats.num + 1,
             elapsed: stats.elapsed + elapsed,
@@ -75,10 +87,13 @@ chrome.runtime.onMessage.addListener((r, s, cb) => {
                     error: undefined,
                 })
             })
-            .catch(e => cb({
-                state: store.state,
-                error: e.toString(),
-            }))
+            .catch(e => {
+                cb({
+                    state: store.state,
+                    error: e.toString(),
+                })
+                error('api error: ' + e)
+            })
     } else if (r.name == 'api_crawl') {
         api.crawl(r.start)
             .then(r => {
@@ -91,10 +106,13 @@ chrome.runtime.onMessage.addListener((r, s, cb) => {
                     error: undefined,
                 })
             })
-            .catch(e => cb({
-                state: store.state,
-                error: e.toString(),
-            }))
+            .catch(e => {
+                cb({
+                    state: store.state,
+                    error: e.toString(),
+                })
+                error('api error: ' + e)
+            })
     }
 
     return true
