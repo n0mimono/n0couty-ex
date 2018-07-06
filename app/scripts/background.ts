@@ -3,6 +3,13 @@ import * as common from './common'
 // store
 let store = new common.Store()
 
+// stats
+let stats = {
+    num: 0,
+    elapsed: 0,
+}
+let timer = new common.Timer()
+
 // connection
 let current: WebSocket
 let connect = () => {
@@ -10,6 +17,7 @@ let connect = () => {
         current.close()
     }
 
+    timer.start()
     current = common.connect(cs => {
         store.setState({
             ...store.state,
@@ -32,6 +40,19 @@ store.addHandler(state => {
     chrome.browserAction.setBadgeBackgroundColor({
         color: state.cs.run ? [80, 180, 80, 255] : [100, 100, 100, 255]
     })    
+})
+store.addHandler(state => {
+    if (!store.prev.cs.run && state.cs.run) {
+        timer.start()
+    }
+    if (store.prev.cs.qiitaId != state.cs.qiitaId) {
+        let elapsed = timer.get()
+        stats = {
+            num: stats.num + 1,
+            elapsed: stats.elapsed + elapsed,
+        }
+        chrome.runtime.sendMessage({ name: 'update', state: state, stats: stats })
+    }
 })
 
 // message (popup to background)

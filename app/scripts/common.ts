@@ -36,12 +36,12 @@ const initState = {
 export type UpdateHandler = (state: State) => void
 
 export class Store {
-    state: State = {
-        cs: { ...initState.cs },
-    }
+    prev: State = initState
+    state: State = { ...initState }
     private updateCbList: UpdateHandler[] = []
 
     setState(next: State) {
+        this.prev = { ...this.state }
         this.state = next
         for (let i = 0; i < this.updateCbList.length; i++) {
             this.updateCbList[i](this.state)
@@ -68,6 +68,23 @@ export function connect(cb: (cs: CrawlState) => void): WebSocket {
     return socket
 }
 
+// Timer
+export class Timer {
+    startTime: Date
+    endTime: Date
+
+    start() {
+        this.startTime = new Date()
+    }
+
+    get(): number {
+        this.endTime = new Date()
+        let diff = this.endTime.valueOf() - this.startTime.valueOf()
+        this.startTime = this.endTime
+        return diff
+    }
+}
+
 // api
 export class Api {
     async init() {
@@ -75,16 +92,16 @@ export class Api {
             method: 'GET',
             credentials: "same-origin",
         })
-        .then(r => r.json())
+            .then(r => r.json())
     }
-    
+
     async crawl(start: boolean) {
         let method = start ? 'POST' : 'PUT'
-        
+
         return fetch(host + '/api/crawl', {
             method: method,
             credentials: "same-origin",
         })
-        .then(r => r.json())
+            .then(r => r.json())
     }
 }

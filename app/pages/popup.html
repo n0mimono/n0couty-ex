@@ -36,8 +36,9 @@
           <li v-if=" cs.run" class="list-group-item item list-group-item-success">クローラ稼働中</li>
           <li v-if="!cs.run" class="list-group-item item list-group-item-info">クローラ停止中</li>
           <li class="list-group-item item">
-            <div class="title">{{ progress + "%" }} : {{ "残り" + countdown +　"時間" }}</div>
-            <div>{{cs.run ? "データを更新しています..." : "データの更新を停止しています"}}</div>
+            <div class="title">{{ progress + "%" }} - {{ "残り " + countdown.hour +　"時間" + countdown.min + "分" }}</div>
+            <div v-if=" cs.run">データを更新しています... ({{ elapsed }}) : {{ interval }}</div>
+            <div v-if="!cs.run">データの更新を停止しています</div>
           </li>
           <li class="list-group-item item">
             <div class="title">now</div>
